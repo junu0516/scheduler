@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html class="loading">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>main view</title>
+<!-- Latest compiled and minified CSS -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+</head>  
+<body>
+<br>
+<div class="container">
+	<h1>Scheduler Demo</h1>
+	<br>
+	<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#productEnrollment">상품 등록</button>
+	<a class="btn btn-primary" href="/scheduler/history">결제 리스트</a>
+	<hr>
+	<table class="table table-striped" id="productList">
+		<thead>
+			<th>번호</th>
+			<th>상품명</th>
+			<th>가격</th>
+			<th>구매</th>
+		</thead>
+		<tbody>
+			{{#products}}
+				<tr>
+					<td>{{productId}}</td>
+					<td>{{productName}}</td>
+					<td>{{productPrice}}</td>
+					<td><button class="btn btn-primary" data-toggle="modal" data-target="#quantityInput" id="btn_{{productId}}">구매</button></td>
+				</tr>
+			{{/products}}
+		</tbody>
+	</table>
+	<hr>
+</div>
+
+<!-- 등록 화면 모달 -->
+<div class="modal" id="productEnrollment">
+	<div class="modal-dialog">
+		<div class="modal-content">
+		
+			<div class="modal-header">
+				<h4 class="modal-title">상품 등록</h4>
+				<button type="button" class="close" data-dismiss="modal">&times;</button>
+			</div>
+			
+			<div class="modal-body">
+				<form>
+					<div class="form-group">
+						<label>상품명 : </label>
+						<input type="text" class="form-control" name="productName" id="productName"/>
+					</div>
+					
+					<div class="form-group">
+						<label>가격 : </label>
+						<input type="text" class="form-control" name="productPrice" id="productPrice"/>
+					</div>
+				</form>
+			</div>
+			
+			<div class="modal-footer">
+				<button type="button" class="btn btn-primary" onclick="submitForm();">등록</button>
+				<button type="button" class="btn btn-danger" data-dismiss="modal">닫기</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+<!-- 구매 화면 모달 -->
+<div class="modal" id="quantityInput">
+	<div class="modal-dialog">
+		<div class="modal-content">
+		
+			<div class="modal-header">
+				<h4 class="modal-title">수량 입력</h4>
+				<button type="button" class="close" data-dismiss="modal">&times;</button>
+			</div>
+			
+			<div class="modal-body">
+				<form>
+					<div class="form-group">
+						<label>수량 : </label>
+						<input type="text" class="form-control" name="productQuantity" id="productQuantity"/>
+					</div>					
+				</form>
+			</div>
+			
+			<div class="modal-footer">
+				<button type="button" class="btn btn-primary" onclick="doPurchase();">등록</button>
+				<button type="button" class="btn btn-danger" data-dismiss="modal">닫기</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+<script>
+	function submitForm(){
+	
+		let productName = document.getElementById('productName').value;
+		let productPrice = document.getElementById('productPrice').value;
+		
+		let product = {
+				productName : productName,
+				productPrice : productPrice,
+				productStatus : 'Y'
+		}
+		
+		console.log(product);
+		
+		$.ajax({
+			url:'/scheduler/product',
+			type:'POST',
+			dataType:'json',
+			contentType:'application/json; charset=UTF-8',
+			data: JSON.stringify(product),
+			dataType : 'text',
+			success: function(data){
+				alert('등록 성공');
+				location.href="/scheduler/main";
+			},
+			error: function(error){
+				alert('에러 발생\n'+error);
+				console.log(error)
+				location.href="/scheduler/main";
+			}
+		});
+	}
+	
+	var productId = "";
+	$(function(){
+		$('#productList tbody tr td button').click(function(){
+			productId = this.parentNode.parentNode.childNodes[1].innerText;
+		});
+	});
+	
+	function doPurchase(){
+		let productQuantity = document.getElementById('productQuantity').value;
+		
+		let purchaseHistory = {
+				purchaseProduct : productId,
+				purchaseQuantity : productQuantity
+		}
+		
+		$.ajax({
+			url:'/scheduler/history',
+			type:'POST',
+			data: JSON.stringify(purchaseHistory),
+			contentType:'application/json; charset=UTF-8',
+			dataType:'text',
+			success: function(status){
+				alert('등록 성공');
+				location.href="/scheduler/history";
+			},
+			error: function(error){
+				alert(error);
+			}
+		});
+	}
+</script>
+
+<!-- jQuery library -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<!-- Popper JS -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+<!-- Latest compiled JavaScript -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

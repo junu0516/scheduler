@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+    
+<mapper namespace="app.conf.MainRepositoryImpl">
+    <insert id="insertHistory" parameterType="hashmap">
+     	INSERT INTO PURCHASE_HISTORY
+     	(
+    		PURCHASE_PRODUCT_ID
+    		, PURCHASE_QUANTITY
+     	)
+     	VALUES
+     	(
+     		#{purchaseProduct}
+     		, #{purchaseQuantity}
+     	)
+    </insert>
+    
+    <select id="selectHistories" resultType="app.models.purchase.PurchaseHistory">
+    	SELECT PURCHASE_HISTORY.PURCHASE_HISTORY_ID AS purchaseHistoryId,
+    		   PRODUCT.PRODUCT_NAME AS purchaseProduct,
+    		   PRODUCT.PRODUCT_PRICE AS productPrice,
+    		   PURCHASE_HISTORY.PURCHASE_QUANTITY AS purchaseQuantity,
+    		   PURCHASE_HISTORY.PURCHASE_STATUS AS purchaseStatus
+    	  FROM PURCHASE_HISTORY
+    	  JOIN PRODUCT ON PRODUCT.PRODUCT_ID = PURCHASE_HISTORY.PURCHASE_PRODUCT_ID;
+    </select>
+    
+    <select id="selectAllNotPaidLists" resultType="_int">
+    	SELECT PURCHASE_HISTORY_ID
+    	  FROM PURCHASE_HISTORY
+    	 WHERE PURCHASE_STATUS='N'
+    </select>
+    
+    <update id="updateStatus" parameterType="_int">
+    	UPDATE PURCHASE_HISTORY
+    	   SET PURCHASE_STATUS = 'Y'
+    	 WHERE PURCHASE_HISTORY_ID = #{purchaseHistoryId}
+    </update>
+    
+</mapper>

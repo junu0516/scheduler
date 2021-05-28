@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html class="loading">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>main view</title>
+<!-- Latest compiled and minified CSS -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>  
+<body>
+<br>
+<div class="container">
+	<h1>Scheduler Demo</h1>
+	<br>
+	<a class="btn btn-primary" href="/scheduler/main">메인으로</a>
+	<hr>
+	<table class="table table-striped">
+		<thead>
+			<th>번호</th>
+			<th>상품명</th>
+			<th>가격</th>
+			<th>수량</th>
+			<th>상태</th>
+		</thead>
+		<tbody>
+			{{#histories}}
+				<tr>
+					<td>{{purchaseHistoryId}}</td>
+					<td>{{purchaseProduct}}</td>
+					<td>{{productPrice}}</td>
+					<td>{{purchaseQuantity}}</td>
+					<td>{{purchaseStatus}}</td>
+				</tr>
+			{{/histories}}
+		</tbody>
+	</table>
+	<hr>
+</div>
+
+<!-- jQuery library -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<!-- Popper JS -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+<!-- Latest compiled JavaScript -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

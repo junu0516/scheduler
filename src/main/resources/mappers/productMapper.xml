@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+    
+<mapper namespace="app.conf.MainRepositoryImpl">
+    <insert id="insertProduct" parameterType="hashmap">
+     	INSERT INTO PRODUCT
+     	(
+    		PRODUCT_NAME
+    		, PRODUCT_PRICE
+     		, PRODUCT_DATE
+     		, PRODUCT_STATUS
+     	)
+     	VALUES
+     	(
+     		#{productName}
+     		, #{productPrice}
+     		, #{productDate}
+     		, #{productStatus}
+     	)
+    </insert>
+    
+    <select id="selectProducts" resultType="app.models.product.Product">
+    	SELECT PRODUCT_ID AS productId,
+    		   PRODUCT_NAME AS productName,
+    		   PRODUCT_PRICE AS productPrice,
+    		   PRODUCT_DATE AS productDate,
+    		   PRODUCT_STATUS AS productStatus
+    	  FROM PRODUCT
+    </select>
+</mapper>
